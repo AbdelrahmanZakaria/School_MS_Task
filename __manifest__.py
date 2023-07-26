@@ -18,7 +18,6 @@
         'security/school_ms_security.xml',
         'security/ir.model.access.csv',
         'views/student_views.xml',
-        'views/templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

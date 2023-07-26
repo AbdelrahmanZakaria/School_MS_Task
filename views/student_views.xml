@@ -1,0 +1,97 @@
+<odoo>
+    <data>
+
+        <record id="school_tree_view" model="ir.ui.view">
+            <field name="name">School Tree View</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="gender"/>
+                    <field name="age"/>
+                    <field name="birth_date"/>
+                    <field name="active"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="school_search_view" model="ir.ui.view">
+            <field name="name">School Search View</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <search string="Students">
+                    <field name="name" string="Student Name"/>
+                    <field name="gender" string="Student Age"/>
+                    <field name="age" string="Student Gender"/>
+
+                    <separator/>
+                        <filter name="Small" string="Small Student" domain="[('age','&lt;',12)]"/>
+                        <filter name="Medium" string="Medium Student" domain="[('age','&gt;',12),('age','&lt;',17)]"/>
+                        <filter name="Large" string="Large Student" domain="[('age','&gt;=',17)]"/>
+                    <separator/>
+                    <filter name="archived" string="Archived" domain="[('active','=',False)]"/>
+                    <group string="Group By">
+                        <filter name="gender" string="Gender" domain="[]" context="{'group_by':'gender'}"/>
+                        <filter name="age" string="Age" domain="[]" context="{'group_by':'age'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="school_form_view" model="ir.ui.view">
+            <field name="name">School Form View</field>
+            <field name="model">student.student</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Draft" type="object" name="Draft" groups="school_ms.school_manager__group"
+                                class="oe_highlight"
+                                attrs="{'invisible':[('state','!=','draft')]}"/>
+                        <button string="Done" type="object" name="Done" groups="school_ms.school_manager__group"
+                                states="draft" class="oe_highlight"/>
+                        <button string="Cancel" type="object" name="Cancel" groups="school_ms.school_manager__group"
+                                states="done" class="oe_highlight"/>
+                        <button string="Return To Draft" type="object" name="Return_To_Draft"
+                                groups="school_ms.school_manager__group" states="cancel" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <group string="Personal Info">
+                                <field name="name"/>
+                                <field name="gender"/>
+                                <field name="age"/>
+                                <field name="birth_date"/>
+                            </group>
+                            <group string="The States">
+                                <field name="state"/>
+                                <field name="active"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Note">
+                                <field name="note" placeholder="Write Your Note Here...."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="school_menu_action" model="ir.actions.act_window">
+            <field name="name">School Ms</field>
+            <field name="res_model">student.student</field>
+        </record>
+
+        <menuitem id="school_menu_root" name="School MS"/>
+        <menuitem id="school_menu_operation" name="Student Operation" parent="school_menu_root"/>
+        <menuitem id="school_menu_student" name="Student" parent="school_menu_operation" action="school_menu_action"/>
+    </data>
+</odoo>
